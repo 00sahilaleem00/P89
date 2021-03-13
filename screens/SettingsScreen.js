@@ -16,10 +16,101 @@ import db from "../config.js";
 import firebase from "firebase";
 
 export default class SettingsScreen extends Component {
+  constructor() {
+    super();
+    this.state = {
+      firstName: "",
+      lastName: "",
+      contactNumber: "",
+      address: "",
+      docID: "",
+    };
+  }
+  getUserDetails = () => {
+    var user = firebase.auth().currentUser;
+    var email = user.email;
+    db.collection("users")
+      .where("Username", "==", email)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          var data = doc.data();
+          this.setState({
+            emailID: data.Username,
+            firstName: data.First_Name,
+            lastName: data.Last_Name,
+            contactNumber: data.Mobile_Number,
+            address: data.Address,
+            docID: doc.id,
+          });
+        });
+      });
+  };
+  updateUserDetails = () => {
+    db.collection("users")
+      .doc(this.state.docID)
+      .update({
+        First_Name: this.state.firstName,
+        Last_Name: this.state.lastName,
+        Mobile_Number: this.state.contactNumber,
+        Address: this.state.address,
+      })
+      .then(() => {
+        Alert.alert("User details successfully updated");
+      });
+  };
+  componentDidMount = () => {
+    this.getUserDetails();
+  };
   render() {
     return (
-      <View>
-        <Text>Access Settings</Text>
+      <View style={styles.container}>
+        <TextInput
+          placeholder={"First Name"}
+          onChangeText={(text) => {
+            this.setState({
+              firstName: text,
+            });
+          }}
+          value={this.state.firstName}
+        />
+        <TextInput
+          placeholder={"Last Name"}
+          onChangeText={(text) => {
+            this.setState({
+              lastName: text,
+            });
+          }}
+          value={this.state.lastName}
+        />
+        <TextInput
+          placeholder={"contactNumber"}
+          keyboardType={"numeric"}
+          maxLength={10}
+          onChangeText={(text) => {
+            this.setState({
+              contactNumber: text,
+            });
+          }}
+          value={this.state.contactNumber}
+        />
+        <TextInput
+          placeholder={"Address"}
+          multiline={true}
+          onChangeText={(text) => {
+            this.setState({
+              address: text,
+            });
+          }}
+          value={this.state.address}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            this.updateUserDetails();
+          }}
+        >
+          <Text>Save</Text>
+        </TouchableOpacity>
       </View>
     );
   }
