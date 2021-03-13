@@ -1,11 +1,13 @@
 import React from "react";
+import { Image } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
+import { createDrawerNavigator } from "react-navigation-drawer";
+import SignUpLoginScreen from "./screens/SignUpLoginScreen";
 import ExchangeScreen from "./screens/ExchangeScreen";
 import HomeScreen from "./screens/HomeScreen";
-import { Image } from "react-native";
-
-import SignUpLoginScreen from "./screens/SignUpLoginScreen.js";
+import SettingsScreen from "./screens/SettingsScreen";
+import CustomSideBarMenu from "./components/CustomSideBarMenu";
 
 export default function App() {
   return <AppContainer />;
@@ -38,9 +40,22 @@ const AppTabNavigator = createBottomTabNavigator({
   },
 });
 
+const AppDrawerNavigator = createDrawerNavigator(
+  {
+    Home: {
+      screen: AppTabNavigator,
+    },
+    Settings: {
+      screen: SettingsScreen,
+    },
+  },
+  { contentComponent: CustomSideBarMenu },
+  { initialRouteName: "Home" }
+);
+
 const SwitchNavigator = createSwitchNavigator({
   SignUpLoginScreen: { screen: SignUpLoginScreen },
-  BottomTab: { screen: AppTabNavigator },
+  BottomTab: { screen: AppDrawerNavigator },
 });
 
 const AppContainer = createAppContainer(SwitchNavigator);
