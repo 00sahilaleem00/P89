@@ -14,6 +14,7 @@ import {
   FlatList,
 } from "react-native";
 import { ListItem } from "react-native-elements";
+import MyHeader from "../components/MyHeader";
 import db from "../config.js";
 import firebase from "firebase";
 
@@ -65,9 +66,11 @@ export default class HomeScreen extends Component {
       </ListItem.Content>
     </ListItem>
   );
+
   render() {
     return (
       <View style={{ flex: 1, marginTop: 100 }}>
+        <MyHeader title="Home" navigation={this.props.navigation} />
         <View style={{ flex: 1 }}>
           {this.state.allRequests.length === 0 ? (
             <View

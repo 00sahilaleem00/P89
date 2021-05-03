@@ -12,6 +12,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
+import MyHeader from "../components/MyHeader";
 import db from "../config.js";
 import firebase from "firebase";
 
@@ -60,6 +61,7 @@ export default class ExchangeScreen extends Component {
   render() {
     return (
       <View style={{ marginTop: 100 }}>
+        <MyHeader title="Exchange" navigation={this.props.navigation} />
         <KeyboardAvoidingView style={styles.keyboardStyle}>
           <TextInput
             style={styles.formTextInput}

@@ -12,6 +12,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
+import MyHeader from "../components/MyHeader";
 import db from "../config.js";
 import firebase from "firebase";
 
@@ -65,6 +66,7 @@ export default class SettingsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <MyHeader title="Settings" navigation={this.props.navigation} />
         <TextInput
           placeholder={"First Name"}
           onChangeText={(text) => {

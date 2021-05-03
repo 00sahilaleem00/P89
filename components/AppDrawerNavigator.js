@@ -4,6 +4,7 @@ import { Icon } from "react-native-elements";
 import { AppTabNavigator } from "./AppTabNavigator";
 import SettingsScreen from "../screens/SettingsScreen";
 import MyBartersScreen from "../screens/MyBartersScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 import CustomSideBarMenu from "./CustomSideBarMenu";
 
 export const AppDrawerNavigator = createDrawerNavigator(
@@ -16,6 +17,9 @@ export const AppDrawerNavigator = createDrawerNavigator(
     },
     MyBarters: {
       screen: MyBartersScreen,
+    },
+    Notifications: {
+      screen: NotificationScreen,
     },
   },
   {

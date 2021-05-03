@@ -62,6 +62,20 @@ export default class UserDetailsScreen extends Component {
     });
   };
 
+  addNotification = () => {
+    var message =
+      this.state.userID + " has shown interest in donating the book";
+    db.collection("all_notifications").add({
+      Target_User_ID: this.state.exchangerID,
+      Barterer_ID: this.state.userID,
+      Exchange_ID: this.state.exchangeID,
+      Item_Name: this.state.itemName,
+      Date: firebase.firestore.FieldValue.serverTimestamp(),
+      Notification_Status: "Unread",
+      Notification_Message: message,
+    });
+  };
+
   render() {
     return (
       <View style={{ marginTop: 100 }}>
@@ -98,6 +112,7 @@ export default class UserDetailsScreen extends Component {
               style={{ margin: 100, marginTop: 500 }}
               onPress={() => {
                 this.addBarters();
+                this.addNotification();
                 this.props.navigation.navigate("Home");
               }}
             >
