@@ -22,18 +22,30 @@ export default class ExchangeScreen extends Component {
       userID: firebase.auth().currentUser.email,
       itemName: "",
       itemDescription: "",
+      exchangeID: "",
     };
   }
 
+  createUniqueID() {
+    return Math.random().toString(36).substring(7);
+  }
+
   addItem = () => {
+    var randomRequestID = this.createUniqueID();
+    console.log(randomRequestID);
+    this.setState({
+      exchangeID: randomRequestID,
+    });
     db.collection("exchange_requests").add({
-      username: this.state.userID,
-      item_name: this.state.itemName,
-      item_description: this.state.itemDescription,
+      Item_Name: this.state.itemName,
+      Item_Description: this.state.itemDescription,
+      Username: this.state.userID,
+      Exchange_ID: randomRequestID,
     });
     this.setState({
       itemName: "",
       itemDescription: "",
+      exchangeID: "",
     });
     return Alert.alert("Item Added Successfully", "", [
       {
@@ -44,9 +56,10 @@ export default class ExchangeScreen extends Component {
       },
     ]);
   };
+
   render() {
     return (
-      <View style={{ marginTop: 20 }}>
+      <View style={{ marginTop: 100 }}>
         <KeyboardAvoidingView style={styles.keyboardStyle}>
           <TextInput
             style={styles.formTextInput}

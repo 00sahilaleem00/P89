@@ -50,9 +50,16 @@ export default class HomeScreen extends Component {
   renderItem = ({ item, i }) => (
     <ListItem key={i} bottomDivider>
       <ListItem.Content>
-        <ListItem.Title>{item.item_name}</ListItem.Title>
-        <ListItem.Subtitle>{item.item_description}</ListItem.Subtitle>
-        <TouchableOpacity style={styles.button}>
+        <ListItem.Title>{item.Item_Name}</ListItem.Title>
+        <ListItem.Subtitle>{item.Item_Description}</ListItem.Subtitle>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            this.props.navigation.navigate("UserDetails", {
+              details: item,
+            });
+          }}
+        >
           <Text style={{ color: "#ffff" }}>Exchange</Text>
         </TouchableOpacity>
       </ListItem.Content>
@@ -60,7 +67,7 @@ export default class HomeScreen extends Component {
   );
   render() {
     return (
-      <View style={{ flex: 1, marginTop: 10 }}>
+      <View style={{ flex: 1, marginTop: 100 }}>
         <View style={{ flex: 1 }}>
           {this.state.allRequests.length === 0 ? (
             <View
