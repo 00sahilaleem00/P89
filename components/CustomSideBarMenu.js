@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { DrawerItems } from "react-navigation-drawer";
 import { Header, Icon, Avatar } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
+import { RFValue } from "react-native-responsive-fontsize";
 import db from "../config";
 import firebase from "firebase";
 
@@ -89,7 +90,7 @@ export default class CustomSideBarMenu extends Component {
           }}
           showEditButton
         />
-        <Text style={{ fontWeight: "bold", fontSize: 20, padding: 5 }}>
+        <Text style={{ fontWeight: "bold", fontSize: RFValue(20), padding: 5 }}>
           {this.state.name}
         </Text>
         <DrawerItems {...this.props} />
@@ -108,6 +109,12 @@ export default class CustomSideBarMenu extends Component {
               firebase.auth().signOut();
             }}
           >
+            <Icon
+              name="logout"
+              type="antdesign"
+              size={RFValue(20)}
+              iconStyle={{ paddingLeft: RFValue(10) }}
+            />
             <Text>Logout</Text>
           </TouchableOpacity>
         </View>

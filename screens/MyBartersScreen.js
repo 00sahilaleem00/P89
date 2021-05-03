@@ -18,6 +18,7 @@ import MyHeader from "../components/MyHeader";
 import db from "../config.js";
 import firebase from "firebase";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default class MyBartersScreen extends Component {
   constructor() {
@@ -153,7 +154,7 @@ export default class MyBartersScreen extends Component {
           <View style={{ flex: 1 }}>
             {this.state.allBarters.length === 0 ? (
               <View style={{ margin: 10 }}>
-                <Text style={{ fontSize: 20 }}>List of all Barters</Text>
+                <Text style={{ fontSize: RFValue(20) }}>List of all Barters</Text>
               </View>
             ) : (
               <FlatList

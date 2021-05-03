@@ -11,15 +11,30 @@ export const AppDrawerNavigator = createDrawerNavigator(
   {
     Home: {
       screen: AppTabNavigator,
+      navigationOptions: {
+        drawerIcon: <Icon name="home" type="font-awesome" />,
+      },
     },
     Settings: {
       screen: SettingsScreen,
+      navigationOptions: {
+        drawerIcon: <Icon name="settings" type="font-awesome" />,
+        drawerLabel: "settings",
+      },
     },
     MyBarters: {
       screen: MyBartersScreen,
+      navigationOptions: {
+        drawerIcon: <Icon name="gift" type="font-awesome" />,
+        drawerLabel: "My Received Books",
+      },
     },
     Notifications: {
       screen: NotificationScreen,
+      navigationOptions: {
+        drawerIcon: <Icon name="bell" type="font-awesome" />,
+        drawerLabel: "Notifications",
+      },
     },
   },
   {

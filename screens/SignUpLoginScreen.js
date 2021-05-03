@@ -12,6 +12,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
+import { Input, Icon } from "react-native-elements";
+import { RFValue } from "react-native-responsive-fontsize";
 import db from "../config.js";
 import firebase from "firebase";
 
@@ -26,6 +28,7 @@ export default class SignUpLoginScreen extends Component {
       last_name: "",
       address: "",
       mobile_number: "",
+      currency: "",
       isModalVisible: false,
     };
   }
@@ -44,6 +47,8 @@ export default class SignUpLoginScreen extends Component {
             Last_Name: this.state.last_name,
             Mobile_Number: this.state.mobile_number,
             Username: this.state.email,
+            Currency: this.state.currency,
+            Is_Item_Exchange_Active: "false",
           });
           return Alert.alert("User Added Successfully", "", [
             {
@@ -89,9 +94,10 @@ export default class SignUpLoginScreen extends Component {
         <ScrollView style={{ width: "80%" }} />
         <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
           <Text style={styles.modalTitle}>REGISTRATION</Text>
-          <TextInput
+          <Input
             style={styles.inputBox}
             placeholder={"emailID@example.com"}
+            label={"emailID@example.com"}
             keyboardType="email-address"
             onChangeText={(text) => {
               this.setState({
@@ -99,7 +105,9 @@ export default class SignUpLoginScreen extends Component {
               });
             }}
           />
-          <TextInput
+          <Input
+            label={"Password"}
+            placeholder={"Password"}
             style={styles.inputBox}
             secureTextEntry={true}
             onChangeText={(text) => {
@@ -108,7 +116,9 @@ export default class SignUpLoginScreen extends Component {
               });
             }}
           />
-          <TextInput
+          <Input
+            label={"Confirm Password"}
+            placeholder={"Confirm Password"}
             style={styles.inputBox}
             secureTextEntry={true}
             onChangeText={(text) => {
@@ -117,8 +127,9 @@ export default class SignUpLoginScreen extends Component {
               });
             }}
           />
-          <TextInput
+          <Input
             style={styles.inputBox}
+            label={"First Name"}
             placeholder={"First Name"}
             onChangeText={(text) => {
               this.setState({
@@ -126,8 +137,9 @@ export default class SignUpLoginScreen extends Component {
               });
             }}
           />
-          <TextInput
+          <Input
             style={styles.inputBox}
+            label={"Last Name"}
             placeholder={"Last Name"}
             onChangeText={(text) => {
               this.setState({
@@ -135,8 +147,9 @@ export default class SignUpLoginScreen extends Component {
               });
             }}
           />
-          <TextInput
+          <Input
             style={styles.inputBox}
+            label={"Address"}
             placeholder={"Address"}
             onChangeText={(text) => {
               this.setState({
@@ -144,8 +157,9 @@ export default class SignUpLoginScreen extends Component {
               });
             }}
           />
-          <TextInput
+          <Input
             style={styles.inputBox}
+            label={"Contact"}
             placeholder={"contact number"}
             keyboardType="numeric"
             maxLength={10}
@@ -155,13 +169,25 @@ export default class SignUpLoginScreen extends Component {
               });
             }}
           />
-          <TouchableOpacity
+          <Input
+            label={"Currency"}
+            style={styles.inputBox}
+            placeholder={"Currency"}
+            onChangeText={(text) => {
+              this.setState({
+                currency: text,
+              });
+            }}
+          />
+          <Icon
+            type={"materialicon"}
+            name={"cancel"}
+            size={RFValue(40)}
+            color={"red"}
             onPress={() => {
               this.setState({ isModalVisible: false });
             }}
-          >
-            <Text>Cancel</Text>
-          </TouchableOpacity>
+          />
           <TouchableOpacity
             onPress={() => {
               this.userSignUp(
@@ -182,7 +208,8 @@ export default class SignUpLoginScreen extends Component {
       <View style={styles.container}>
         <View style={styles.container}>{this.showModal()}</View>
         <View>
-          <TextInput
+          <Input
+            label={"email address"}
             style={styles.inputBox}
             keyboardType="email-address"
             placeholder={"Enter Email ID"}
@@ -192,7 +219,8 @@ export default class SignUpLoginScreen extends Component {
               });
             }}
           />
-          <TextInput
+          <Input
+            label={"password"}
             style={styles.inputBox}
             secureTextEntry={true}
             placeholder={"Enter Password"}

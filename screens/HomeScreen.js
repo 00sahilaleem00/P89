@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { ListItem } from "react-native-elements";
 import MyHeader from "../components/MyHeader";
+import { RFValue } from "react-native-responsive-fontsize";
 import db from "../config.js";
 import firebase from "firebase";
 
@@ -53,6 +54,7 @@ export default class HomeScreen extends Component {
       <ListItem.Content>
         <ListItem.Title>{item.Item_Name}</ListItem.Title>
         <ListItem.Subtitle>{item.Item_Description}</ListItem.Subtitle>
+        <ListItem.Subtitle>{item.Item_Value + " Euros"}</ListItem.Subtitle>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
@@ -76,12 +78,12 @@ export default class HomeScreen extends Component {
             <View
               style={{
                 flex: 1,
-                fontSize: 20,
+                fontSize: RFValue(20),
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: 20 }}>List of all items</Text>
+              <Text style={{ fontSize: RFValue(20) }}>List of all items</Text>
             </View>
           ) : (
             <FlatList

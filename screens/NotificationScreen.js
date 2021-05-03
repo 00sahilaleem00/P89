@@ -17,6 +17,8 @@ import { ListItem, Icon } from "react-native-elements";
 import MyHeader from "../components/MyHeader";
 import db from "../config.js";
 import firebase from "firebase";
+import { RFValue } from "react-native-responsive-fontsize";
+
 import SwipeableFlatList from "../components/SwipeableFlatList";
 
 export default class NotificationScreen extends Component {
@@ -74,7 +76,7 @@ export default class NotificationScreen extends Component {
         <View style={{ flex: 0.9 }}>
           {this.state.allNotifications.length === 0 ? (
             <View style={{ margin: 10 }}>
-              <Text style={{ fontSize: 20 }}>You have no Notifications</Text>
+              <Text style={{ fontSize: RFValue(20) }}>You have no Notifications</Text>
             </View>
           ) : (
             <SwipeableFlatList allNotifications={this.state.allNotifications} />

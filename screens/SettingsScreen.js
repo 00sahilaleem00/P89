@@ -13,6 +13,8 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import MyHeader from "../components/MyHeader";
+import { Input } from "react-native-elements";
+import { RFValue } from "react-native-responsive-fontsize";
 import db from "../config.js";
 import firebase from "firebase";
 
@@ -67,8 +69,23 @@ export default class SettingsScreen extends Component {
     return (
       <View style={styles.container}>
         <MyHeader title="Settings" navigation={this.props.navigation} />
-        <TextInput
+        <Input
+          label={"First Name"}
           placeholder={"First Name"}
+          style={{
+            width: "90%",
+            height: RFValue(50),
+            padding: RFValue(10),
+            borderWidth: 1,
+            borderRadius: 2,
+            borderColor: "yellow",
+            marginBottom: RFValue(20),
+            marginLeft: RFValue(20),
+          }}
+          containerStyle={{
+            marginBottom: RFValue(25),
+            marginTop: RFValue(30),
+          }}
           onChangeText={(text) => {
             this.setState({
               firstName: text,
@@ -76,8 +93,20 @@ export default class SettingsScreen extends Component {
           }}
           value={this.state.firstName}
         />
-        <TextInput
+        <Input
           placeholder={"Last Name"}
+          label={"Last Name"}
+          style={{
+            width: "90%",
+            height: RFValue(50),
+            padding: RFValue(10),
+            borderWidth: 1,
+            borderRadius: 2,
+            borderColor: "yellow",
+            marginBottom: RFValue(20),
+            marginLeft: RFValue(20),
+          }}
+          containerStyle={{ marginBottom: RFValue(25) }}
           onChangeText={(text) => {
             this.setState({
               lastName: text,
@@ -85,8 +114,20 @@ export default class SettingsScreen extends Component {
           }}
           value={this.state.lastName}
         />
-        <TextInput
-          placeholder={"contactNumber"}
+        <Input
+          placeholder={"Contact"}
+          label={"Contact"}
+          style={{
+            width: "90%",
+            height: RFValue(50),
+            padding: RFValue(10),
+            borderWidth: 1,
+            borderRadius: 2,
+            borderColor: "yellow",
+            marginBottom: RFValue(20),
+            marginLeft: RFValue(20),
+          }}
+          containerStyle={{ marginBottom: RFValue(25) }}
           keyboardType={"numeric"}
           maxLength={10}
           onChangeText={(text) => {
@@ -96,8 +137,19 @@ export default class SettingsScreen extends Component {
           }}
           value={this.state.contactNumber}
         />
-        <TextInput
+        <Input
           placeholder={"Address"}
+          label={"Address"}
+          style={{
+            width: "90%",
+            height: RFValue(50),
+            padding: RFValue(10),
+            borderWidth: 1,
+            borderRadius: 2,
+            borderColor: "yellow",
+            marginBottom: RFValue(20),
+            marginLeft: RFValue(20),
+          }}
           multiline={true}
           onChangeText={(text) => {
             this.setState({
@@ -107,11 +159,24 @@ export default class SettingsScreen extends Component {
           value={this.state.address}
         />
         <TouchableOpacity
+          style={{
+            flex: 0.22,
+            alignItems: "center",
+            marginTop: RFValue(100),
+          }}
           onPress={() => {
             this.updateUserDetails();
           }}
         >
-          <Text>Save</Text>
+          <Text
+            style={{
+              fontSize: RFValue(23),
+              fontWeight: "bold",
+              color: "red",
+            }}
+          >
+            Save
+          </Text>
         </TouchableOpacity>
       </View>
     );

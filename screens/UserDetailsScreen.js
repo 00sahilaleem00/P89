@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { Card } from "react-native-elements";
+import { RFValue } from "react-native-responsive-fontsize";
 import db from "../config.js";
 import firebase from "firebase";
 
@@ -80,14 +81,14 @@ export default class UserDetailsScreen extends Component {
     return (
       <View style={{ marginTop: 100 }}>
         <View style={{ flex: 0.7 }}>
-          <Text style={{ fontWeight: "500", fontSize: 20 }}>
+          <Text style={{ fontWeight: "500", fontSize: RFValue(20) }}>
             Exchanger Information
           </Text>
           <Text
             style={{
               fontWeight: "400",
-              fontSize: 20,
-              marginTop: 30,
+              fontSize: RFValue(20),
+              marginTop: RFValue(30),
             }}
           >
             Name: {this.state.exchangerName}
