@@ -11,6 +11,8 @@ import {
   Modal,
   ScrollView,
   KeyboardAvoidingView,
+  TouchableHighlight,
+  FlatList,
 } from "react-native";
 import MyHeader from "../components/MyHeader";
 import db from "../config.js";
@@ -24,6 +26,13 @@ export default class ExchangeScreen extends Component {
       itemName: "",
       itemDescription: "",
       exchangeID: "",
+      exchangeStatus: "",
+      documentID: "",
+      isItemExchangeActive: "",
+      userDocumentID: "",
+      showFlatList: false,
+      dataSource: "",
+      itemStatus: "",
     };
   }
 
@@ -31,18 +40,69 @@ export default class ExchangeScreen extends Component {
     return Math.random().toString(36).substring(7);
   }
 
-  addItem = () => {
+  getItemExchange = () => {
+    var itemExchange = db
+      .collection("exchange_requests")
+      .where("Username", "==", this.state.userID)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.data().Item_Status !== "Received") {
+            this.setState({
+              exchangeID: doc.data().Exchange_ID,
+              itemName: doc.data().Item_Name,
+              itemStatus: doc.data().Item_Status,
+              documentID: doc.id,
+            });
+          }
+        });
+      });
+  };
+
+  getIsItemExchangeActive = () => {
+    db.collection("users")
+      .where("Username", "==", this.state.userID)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          this.setState({
+            isItemExchangeActive: doc.data().Is_Item_Exchange_Active,
+          });
+        });
+      });
+  };
+
+  componentDidMount = () => {
+    this.getItemExchange();
+    this.getIsItemExchangeActive();
+  };
+
+  addItem = async () => {
     var randomRequestID = this.createUniqueID();
     console.log(randomRequestID);
     this.setState({
       exchangeID: randomRequestID,
     });
     db.collection("exchange_requests").add({
+      Username: this.state.userID,
       Item_Name: this.state.itemName,
       Item_Description: this.state.itemDescription,
-      Username: this.state.userID,
       Exchange_ID: randomRequestID,
+      Date: firebase.firestore.FieldValue.serverTimestamp(),
+      Item_Status: "Requested",
     });
+    await this.getItemExchange();
+    db.collection("users")
+      .where("Username", "==", this.state.userID)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          db.collection("users")
+            .doc(doc.id)
+            .update({ Is_Item_Exchange_Active: true });
+        });
+        this.setState({ isItemExchangeActive: true });
+      });
     this.setState({
       itemName: "",
       itemDescription: "",
@@ -58,44 +118,138 @@ export default class ExchangeScreen extends Component {
     ]);
   };
 
+  sendNotification = () => {
+    db.collection("users")
+      .where("Username", "==", this.state.userID)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          var name = doc.data().First_Name;
+          var lastName = doc.data().Last_Name;
+          db.collection("all_notifications")
+            .where("Exchange_ID", "==", this.state.exchangeID)
+            .get()
+            .then((snapshot) => {
+              snapshot.forEach((doc) => {
+                var bartererID = doc.data().Barterer_ID;
+                var itemName = doc.data().Item_Name;
+                db.collection("all_notifications").add({
+                  Target_User_ID: bartererID,
+                  Notification_Message:
+                    name + " " + lastName + " received the item " + itemName,
+                  Notification_Status: "Unread",
+                  Item_Name: itemName,
+                });
+              });
+            });
+        });
+      });
+    db.collection("exchange_requests")
+      .where("Exchange_ID", "==", this.state.exchangeID)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          var docID = doc.id;
+          db.collection("exchange_requests").doc(docID).update({
+            Item_Status: "Received",
+          });
+        });
+      });
+    db.collection("users")
+      .where("Username", "==", this.state.userID)
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          db.collection("users").doc(doc.id).update({
+            Is_Item_Exchange_Active: false,
+          });
+        });
+        this.setState({ isItemExchangeActive: false });
+      });
+  };
+
   render() {
-    return (
-      <View style={{ marginTop: 100 }}>
-        <MyHeader title="Exchange" navigation={this.props.navigation} />
-        <KeyboardAvoidingView style={styles.keyboardStyle}>
-          <TextInput
-            style={styles.formTextInput}
-            placeholder="Enter Item Name"
-            value={this.state.itemName}
-            onChangeText={(text) => {
-              this.setState({
-                itemName: text,
-              });
-            }}
-          />
-          <TextInput
-            style={styles.formTextInput}
-            placeholder="Enter Item Description"
-            value={this.state.itemDescription}
-            multiline
-            numberOfLines={10}
-            onChangeText={(text) => {
-              this.setState({
-                itemDescription: text,
-              });
-            }}
-          />
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              this.addItem();
+    if (this.state.isItemExchangeActive === true) {
+      return (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <View
+            style={{
+              borderColor: "red",
+              borderWidth: 2,
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 10,
             }}
           >
-            <Text>Add Item</Text>
+            <Text>Item Name</Text>
+            <Text>{this.state.itemName}</Text>
+          </View>
+          <View
+            style={{
+              borderColor: "blue",
+              borderWidth: 2,
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 10,
+            }}
+          >
+            <Text>Item Status</Text>
+            <Text>{this.state.itemStatus}</Text>
+          </View>
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              borderColor: "orange",
+              width: 300,
+              alignSelf: "center",
+            }}
+            onPress={() => {
+              this.sendNotification();
+            }}
+          >
+            <Text>I recieved the item</Text>
           </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </View>
-    );
+        </View>
+      );
+    } else {
+      return (
+        <View style={{ marginTop: 100 }}>
+          <MyHeader title="Exchange" navigation={this.props.navigation} />
+          <KeyboardAvoidingView style={styles.keyboardStyle}>
+            <TextInput
+              style={styles.formTextInput}
+              placeholder="Enter Item Name"
+              value={this.state.itemName}
+              onChangeText={(text) => {
+                this.setState({
+                  itemName: text,
+                });
+              }}
+            />
+            <TextInput
+              style={styles.formTextInput}
+              placeholder="Enter Item Description"
+              value={this.state.itemDescription}
+              multiline
+              numberOfLines={10}
+              onChangeText={(text) => {
+                this.setState({
+                  itemDescription: text,
+                });
+              }}
+            />
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                this.addItem();
+              }}
+            >
+              <Text>Add Item</Text>
+            </TouchableOpacity>
+          </KeyboardAvoidingView>
+        </View>
+      );
+    }
   }
 }
 
